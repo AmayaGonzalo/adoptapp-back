@@ -8,7 +8,7 @@ export class AdoptionController {
   constructor(private readonly adoptionService: AdoptionService) {}
 
   @Post('nuevo')
-  async createAdoption(@Body() updateAdoptionDto:UpdateAdoptionDto):Promise<Adoption> {
+  async createAdoption(@Body() updateAdoptionDto:UpdateAdoptionDto):Promise<any> {
     return await this.adoptionService.create(updateAdoptionDto);
   }
 

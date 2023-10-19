@@ -17,11 +17,11 @@ export class InformationType {
         this.type = type;
     }
 
-    private getType(type:string):string{
+    public getType(type:string):string{
         return type;
     }
 
-    private setType(type:string):void{
+    public setType(type:string):void{
         this.type = type;
     }
 }

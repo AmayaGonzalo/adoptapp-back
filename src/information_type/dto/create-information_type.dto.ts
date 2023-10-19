@@ -1,1 +1,4 @@
-export class CreateInformationTypeDto {}
+export class CreateInformationTypeDto {
+
+    
+}

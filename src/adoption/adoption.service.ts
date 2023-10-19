@@ -20,7 +20,7 @@ export class AdoptionService {
               private readonly clientRepository:Repository<Client>
   ){}
 
-  async create(updateAdoptionDto:UpdateAdoptionDto):Promise<Adoption> {
+  async create(updateAdoptionDto:UpdateAdoptionDto):Promise<{ cityName: string, petName: string, clientName: string }> {
     try{
       const { petId, cityId, clientId } = updateAdoptionDto;
       let pet: Pet = await this.petRepository.findOne({ where:{id:petId} });
@@ -40,7 +40,11 @@ export class AdoptionService {
             adoption.pet = pet;
             adoption.client = client;            
             await this.adoptionRepository.save(adoption);
-            return adoption;
+            return {
+              cityName: adoption.city.name,
+              petName: adoption.pet.name,
+              clientName: adoption.client.name + ' ' + adoption.client.surname
+            }
           }
         }
       }

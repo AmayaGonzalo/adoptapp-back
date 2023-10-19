@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { AttributeService } from './attribute.service';
-import { CreateAttributeDto } from './dto/create-attribute.dto';
+import { AttributeDto } from './dto/create-attribute.dto';
 import { UpdateAttributeDto } from './dto/update-attribute.dto';
+import { Attribute } from './entities/attribute.entity';
 
 @Controller('attribute')
 export class AttributeController {
   constructor(private readonly attributeService: AttributeService) {}
 
-  @Post()
-  create(@Body() createAttributeDto: CreateAttributeDto) {
-    return this.attributeService.create(createAttributeDto);
+  @Post('nuevo')
+  async create(@Body() attributeDto: AttributeDto):Promise<AttributeDto> {
+    return await this.attributeService.create(attributeDto);
   }
 
   @Get()
-  findAll() {
-    return this.attributeService.findAll();
+  async findAll():Promise<Attribute[]> {
+    return await this.attributeService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.attributeService.findOne(+id);
+  async findOne(@Param('id') id:number):Promise<AttributeDto> {
+    return await this.attributeService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAttributeDto: UpdateAttributeDto) {
-    return this.attributeService.update(+id, updateAttributeDto);
+  @Put('modificar/:id')
+  async update(@Param('id') id:number, @Body() updateAttributeDto: UpdateAttributeDto):Promise<AttributeDto> {
+    return await this.attributeService.update(id, updateAttributeDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.attributeService.remove(+id);
+  @Delete('eliminar/:id')
+  async remove(@Param('id') id:number): Promise<{message:string}> {
+    return await this.attributeService.remove(id);
   }
 }
