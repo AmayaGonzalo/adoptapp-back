@@ -20,7 +20,7 @@ export class PetController {
   @Get('count')
     async getCount(): Promise<number> {
         return await this.petService.countPets();
-    }
+  }
 
   @Get('filter__:pageNumber')
   async filterPet(@Param('pageNumber') pageNumber: number, @Query('specie') specie?: string, @Query('sex') sex?: string, @Query('location') location?: number  ):Promise<PetDto[]> {
