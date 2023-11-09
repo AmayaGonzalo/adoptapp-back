@@ -27,10 +27,10 @@ export class PetController {
     return await this.petService.filterPets(pageNumber, specie, location, sex);
   }
 
-  // @Get(':id')
-  // async findOnePet(@Param('id') id:number): Promise<PetDto> {
-  //   return await this.petService.findOne(id);
-  // }
+  @Get(':id')
+  async findOnePet(@Param('id') id:number): Promise<PetDto> {
+    return await this.petService.findOne(id);
+  }
 
   // @Put('modificar/:id')
   // async updatePet(@Param('id') id: number, @Body() updatePetDto: UpdatePetDto):Promise<PetDto> {
