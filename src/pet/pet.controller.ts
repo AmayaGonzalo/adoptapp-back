@@ -12,10 +12,10 @@ export class PetController {
     return await this.petService.createNewPet(createPetDto);
   }
 
-  // @Get()
-  // async findAllPet():Promise<PetDto[]> {
-  //   return await this.petService.findAll();
-  // }
+  @Get()
+  async findAllPet():Promise<PetDto[]> {
+    return await this.petService.findAll();
+  }
 
   @Get('count')
     async getCount(): Promise<number> {
@@ -32,10 +32,10 @@ export class PetController {
     return await this.petService.findOne(id);
   }
 
-  // @Put('modificar/:id')
-  // async updatePet(@Param('id') id: number, @Body() updatePetDto: UpdatePetDto):Promise<PetDto> {
-  //   return await this.petService.update(id, updatePetDto);
-  // }
+  @Put('update/:id')
+  async updatePet(@Param('id') id: number, @Body() updatePetDto: UpdatePetDto):Promise<PetDto> {
+    return await this.petService.update(id, updatePetDto);
+  }
 
   // @Delete('eliminar/:id')
   // async removePet(@Param('id') id:number):Promise<string> {

@@ -12,6 +12,11 @@ export class PetService {
   constructor(@InjectRepository(Pet)
   private readonly petRepository:Repository<Pet>){}
 
+  async findAll(): Promise<PetDto[]> {
+    const petsTotal = await this.petRepository.find();
+    return petsTotal;
+  }
+
   async createNewPet(createPetDto: PetDto):Promise<PetDto> {
     try{
       const { name, specie, sex, age, description, url_img  } = createPetDto;
@@ -108,46 +113,46 @@ export class PetService {
     }
   }
 
-//   async update(id: number, updatePetDto: UpdatePetDto):Promise<PetDto> {
-//     try{
-//       let pet: Pet = await this.petRespository.findOne({ where:{id: id} });
-//       if(!pet){
-//         throw new Error('Lo siento, no encontramos la mascsota que buscas');
-//       }else{
-//         if(updatePetDto.name != null || updatePetDto.name!= undefined){
-//           pet.setName(updatePetDto.name);
-//           pet = await this.petRespository.save(pet);
-//         }
-//         if(updatePetDto.specie != null || updatePetDto.specie != undefined){
-//           pet.setSpecie(updatePetDto.specie);
-//           pet = await this.petRespository.save(pet);
-//         }
-//         if(updatePetDto.sex != null || updatePetDto.sex != undefined){
-//           pet.setSex(updatePetDto.sex);
-//           pet = await this.petRespository.save(pet);
-//         }
-//         if(updatePetDto.age != null || updatePetDto.age != undefined){
-//           pet.setAge(updatePetDto.age);
-//           pet = await this.petRespository.save(pet);
-//         }
-//         if(updatePetDto.url_img != null || updatePetDto.url_img != undefined){
-//           pet.setUrl_img(updatePetDto.url_img);
-//           pet = await this.petRespository.save(pet);
-//         }
-//         if(updatePetDto.description != null || updatePetDto.description != undefined){
-//           pet.setDescription(updatePetDto.description);
-//           pet = await this.petRespository.save(pet);
-//           return pet;
-//         }
-//       }
-//     }
-//     catch(error){
-//       throw new HttpException({
-//         status: HttpStatus.CONFLICT,
-//         error: 'Error en Mascotas - ' + error
-//       },HttpStatus.NOT_FOUND);
-//     }
-//   }
+  async update(id: number, updatePetDto: UpdatePetDto):Promise<PetDto> {
+    try{
+      let pet: Pet = await this.petRepository.findOne({ where:{id: id} });
+      if(!pet){
+        throw new Error('Lo siento, no encontramos la mascsota que buscas');
+      }else{
+        if(updatePetDto.name != null || updatePetDto.name!= undefined){
+          pet.setName(updatePetDto.name);
+          pet = await this.petRepository.save(pet);
+        }
+        if(updatePetDto.specie != null || updatePetDto.specie != undefined){
+          pet.setSpecie(updatePetDto.specie);
+          pet = await this.petRepository.save(pet);
+        }
+        if(updatePetDto.sex != null || updatePetDto.sex != undefined){
+          pet.setSex(updatePetDto.sex);
+          pet = await this.petRepository.save(pet);
+        }
+        if(updatePetDto.age != null || updatePetDto.age != undefined){
+          pet.setAge(updatePetDto.age);
+          pet = await this.petRepository.save(pet);
+        }
+        if(updatePetDto.url_img != null || updatePetDto.url_img != undefined){
+          pet.setUrl_img(updatePetDto.url_img);
+          pet = await this.petRepository.save(pet);
+        }
+        if(updatePetDto.description != null || updatePetDto.description != undefined){
+          pet.setDescription(updatePetDto.description);
+          pet = await this.petRepository.save(pet);
+        }
+        return pet;
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Mascotas - ' + error
+      },HttpStatus.NOT_FOUND);
+    }
+  }
 
 //   async remove(id: number):Promise<string> {
 //     try{
