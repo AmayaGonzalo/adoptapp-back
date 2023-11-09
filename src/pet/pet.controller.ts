@@ -7,10 +7,10 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 export class PetController {
   constructor(private readonly petService: PetService) {}
 
-  // @Post('nuevo')
-  // async createNewPet(@Body() createPetDto: PetDto):Promise<PetDto> {
-  //   return await this.petService.createNewPet(createPetDto);
-  // }
+  @Post('nuevo')
+  async createNewPet(@Body() createPetDto: PetDto):Promise<PetDto> {
+    return await this.petService.createNewPet(createPetDto);
+  }
 
   // @Get()
   // async findAllPet():Promise<PetDto[]> {

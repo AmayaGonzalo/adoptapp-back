@@ -12,23 +12,23 @@ export class PetService {
   constructor(@InjectRepository(Pet)
   private readonly petRepository:Repository<Pet>){}
 
-  // async createNewPet(createPetDto: PetDto):Promise<PetDto> {
-  //   try{
-  //     const { name, specie, sex, age, description, url_img } = createPetDto;
-  //     const newPet: PetDto = await this.petRespository.save(new Pet(name, specie, sex, age, url_img, description));
-  //     if(!newPet){
-  //       throw new Error('No se ha podido crear la mascota');
-  //     }else{
-  //       return newPet;
-  //     }
-  //   }
-  //   catch(error){
-  //     throw new HttpException({
-  //       status: HttpStatus.CONFLICT,
-  //       error: 'Error en Mascotas - ' + error
-  //     },HttpStatus.NOT_FOUND);
-  //   }
-  // }
+  async createNewPet(createPetDto: PetDto):Promise<PetDto> {
+    try{
+      const { name, specie, sex, age, description, url_img  } = createPetDto;
+      const newPet: PetDto = await this.petRepository.save(new Pet(name, specie, sex, age, description, url_img));
+      if(!newPet){
+        throw new Error('No se ha podido crear la mascota');
+      }else{
+        return newPet;
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Mascotas - ' + error
+      },HttpStatus.NOT_FOUND);
+    }
+  }
 
   // async findAll():Promise<PetDto[]> {
   //   try{
