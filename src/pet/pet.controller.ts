@@ -23,7 +23,7 @@ export class PetController {
   }
 
   @Get('filter__:pageNumber')
-  async filterPet(@Param('pageNumber') pageNumber: number, @Query('specie') specie?: string, @Query('sex') sex?: string, @Query('location') location?: number  ):Promise<PetDto[]> {
+  async filterPets(@Param('pageNumber') pageNumber: number, @Query('specie') specie?: string, @Query('sex') sex?: string, @Query('location') location?: number  ):Promise<PetDto[]> {
     return await this.petService.filterPets(pageNumber, specie, location, sex);
   }
 

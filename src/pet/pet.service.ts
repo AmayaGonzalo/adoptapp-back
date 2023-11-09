@@ -15,7 +15,7 @@ export class PetService {
   async createNewPet(createPetDto: PetDto):Promise<PetDto> {
     try{
       const { name, specie, sex, age, description, url_img  } = createPetDto;
-      const newPet: PetDto = await this.petRepository.save(new Pet(name, specie, sex, age, description, url_img));
+      const newPet: PetDto = await this.petRepository.save(new Pet(name, specie, sex, age, url_img, description));
       if(!newPet){
         throw new Error('No se ha podido crear la mascota');
       }else{
@@ -30,60 +30,6 @@ export class PetService {
     }
   }
 
-  // async findAll():Promise<PetDto[]> {
-  //   try{
-  //     const Pets: PetDto[] = await this.petRespository.find();
-  //     if(!Pets){
-  //       throw new Error ('Los siento, no encontramos a las mascotas');
-  //     }else{
-  //       return Pets;
-  //     }
-  //   }
-  //   catch(error){
-  //     throw new HttpException({
-  //       status: HttpStatus.CONFLICT,
-  //       error: 'Error en Mascotas - ' + error
-  //     },HttpStatus.NOT_FOUND);
-  //   }
-  // }
-
-
-  //falta paginar las consultas
-  async filterPet(pageNumber, specie?, sex?, location?):Promise<PetDto[]> {
-    let filter = {specie,sex,location};
-    let skipVar = Number((Number(pageNumber) - 1) * 10);
-    let takeVar = 10;
-    let Pets: any;
-    //let query = { take: takeVar, skip: Number(skipVar) };
-    try{
-      if(filter){
-        Pets = await this.petRepository.find(
-          { where:
-            {
-              specie:specie,
-              sex:sex
-            },
-            // skip: Number(skipVar),
-            // take: takeVar
-          });
-      } else {
-        Pets = await this.petRepository.find()
-      }
-
-      if(!Pets){
-        throw new Error ('Los siento, no encontramos a las mascotas');
-      }else{
-        return Pets;
-      }
-      
-    }
-    catch(error){
-      throw new HttpException({
-        status: HttpStatus.CONFLICT,
-        error: 'Error en Mascotas - ' + error
-      },HttpStatus.NOT_FOUND);
-    }
-  }
 
   async filterPets(pageNumber: number, specie?: string, location_id?: number, sex?: string): Promise<PetDto[]> {
 
@@ -145,22 +91,22 @@ export class PetService {
     }
   };
 
-//   async findOne(id: number):Promise<PetDto> {
-//     try{
-//       const pet: PetDto = await this.petRespository.findOne({ where:{id:id} });
-//       if(!pet){
-//         throw new Error('No se ha encontrado esa mascota');
-//       }else{
-//         return pet;
-//       }
-//     }
-//     catch(error){
-//       throw new HttpException({
-//         status: HttpStatus.CONFLICT,
-//         error: 'Error en Mascotas - ' + error
-//       },HttpStatus.NOT_FOUND);
-//     }
-//   }
+  async findOne(id: number):Promise<PetDto> {
+    try{
+      const pet: PetDto = await this.petRepository.findOne({ where:{id:id} });
+      if(!pet){
+        throw new Error('No se ha encontrado esa mascota');
+      }else{
+        return pet;
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Mascotas - ' + error
+      },HttpStatus.NOT_FOUND);
+    }
+  }
 
 //   async update(id: number, updatePetDto: UpdatePetDto):Promise<PetDto> {
 //     try{
