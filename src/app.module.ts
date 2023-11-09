@@ -14,31 +14,32 @@ import { InformationModule } from './information/information.module';
 import { InformationTypeModule } from './information_type/information_type.module';
 import { UserModule } from './user/user.module';
 import { InstitutionModule } from './institution/institution.module';
+import { database, password, username, port, host } from 'env.vars';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
     "type": "mysql",
-    "host":"localhost",
-    "port": 3306,
-    "username":"root",
-    "password":"12345",
-    "database": "adopt_app",
+    "host":host,
+    "port": port,
+    "username": username,
+    "password":password,
+    "database": database,
     "entities": [__dirname + "/**/**/**.entity{.ts,.js}"],
     "synchronize": true
   }),
-  PetModule,
-  AttributeModule,
-  CityModule,
-  AdoptionModule,
-  ClientModule,
-  ComplainantsModule,
-  ComplaintModule,
-  ComplaintTypeModule,
-  InformationModule,
-  InformationTypeModule,
-  UserModule,
-  InstitutionModule
-  ],  
+    PetModule,
+    AttributeModule,
+    CityModule,
+    AdoptionModule,
+    ClientModule,
+    ComplainantsModule,
+    ComplaintModule,
+    ComplaintTypeModule,
+    InformationModule,
+    InformationTypeModule,
+    UserModule,
+    InstitutionModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
