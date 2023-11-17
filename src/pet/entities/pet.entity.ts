@@ -54,7 +54,7 @@ export class Pet {
     adoption: Adoption;
 
     
-    constructor(name:string, specie:string, sex:string, age:number, url_img?:string, description?:string){
+    constructor(name:string, specie:string, sex:string, age:number, url_img?:string, description?:string, attributes?: Attribute[]){
         this.name = name;
         this.specie = specie;
         this.sex = sex;

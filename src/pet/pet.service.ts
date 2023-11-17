@@ -19,8 +19,8 @@ export class PetService {
 
   async createNewPet(createPetDto: PetDto):Promise<PetDto> {
     try{
-      const { name, specie, sex, age, description, url_img  } = createPetDto;
-      const newPet: PetDto = await this.petRepository.save(new Pet(name, specie, sex, age, url_img, description));
+      const { name, specie, sex, age, description, url_img, attributes} = createPetDto;
+      const newPet: PetDto = await this.petRepository.save(new Pet(name, specie, sex, age, url_img, description, attributes));
       if(!newPet){
         throw new Error('No se ha podido crear la mascota');
       }else{
@@ -48,7 +48,7 @@ export class PetService {
         ...(sex ? { sex } : {})
       }
       const criterion: FindManyOptions = {
-      //  relations: ['attributes', 'city'],
+        relations: ['attributes', 'institution'],
         take: elementsPage,
         where: {
           available: false,
@@ -56,6 +56,10 @@ export class PetService {
         },
         skip: skipItems
       };
+
+
+      
+
       const leakedPets = await this.petRepository.find(criterion);
 
       if (!leakedPets) {
@@ -67,10 +71,10 @@ export class PetService {
         sex: pet.sex,
         age: pet.age,
         specie: pet.specie,
-        attributes : [ { attribut : "a"}],
-        //attributes : pet.getAttributes(),  
+        //attributes : [ { attributes : "a"}],
+        attributes : pet.attributes.map(attribute => (attribute.name)),  
         description: pet.description,
-        urlImg: pet.url_img,
+        url_img: pet.url_img,
         interested: pet.interested,
       }));
       return petData;
