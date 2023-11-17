@@ -1,7 +1,7 @@
 import { url } from "inspector";
 import { City } from "src/city/entities/city.entity";
 import { Complainant } from "src/complainants/entities/complainant.entity";
-import { ComplaintType } from "src/complaint_type/entities/complaint_type.entity";
+import { ComplaintTypeDTO } from "src/complaint_type/entities/complaint_type.entity";
 import { Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 
 @Entity({ name: "complaint" })
@@ -27,9 +27,9 @@ export class Complaint {
     @JoinColumn()
     city: City;
 
-    @ManyToOne(()=>ComplaintType,complaint_type=>complaint_type.complaints)
+    @ManyToOne(()=>ComplaintTypeDTO,complaint_type=>complaint_type.complaints)
     @JoinColumn()
-    complaint_type: ComplaintType;
+    complaint_type: ComplaintTypeDTO;
 
     constructor(description:string, url_img?:string){
         this.description = description;
