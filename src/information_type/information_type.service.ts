@@ -28,12 +28,12 @@ export class InformationTypeService {
     }
   }
 
-  async findAll() {
+  async findAll():Promise<InformationTypeDTO[]> {
     const informationTypeTotal = await this.informationTypeRepository.find();
     return informationTypeTotal;
   }
 
-  async findOne(id: number) {
+  async findOne(id: number):Promise<InformationTypeDTO> {
     try{
       const type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id:id} });
       if(!type){
@@ -50,7 +50,7 @@ export class InformationTypeService {
     }
   }
 
-  async update(id: number, updateInformationTypeDto: UpdateInformationTypeDto) {
+  async update(id: number, updateInformationTypeDto: UpdateInformationTypeDto):Promise<InformationTypeDTO> {
     try{
       let type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id: id} });
       if(!type){
@@ -71,7 +71,7 @@ export class InformationTypeService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number):Promise<string> {
     try{
       let type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id: id} });
       if(!type){
