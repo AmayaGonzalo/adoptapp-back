@@ -7,7 +7,7 @@ import { UpdateInformationTypeDto } from './dto/update-information_type.dto';
 export class InformationTypeController {
   constructor(private readonly informationTypeService: InformationTypeService) {}
 
-  @Post()
+  @Post('create-type')
   create(@Body() createInformationTypeDto: CreateInformationTypeDto) {
     return this.informationTypeService.create(createInformationTypeDto);
   }
@@ -22,12 +22,12 @@ export class InformationTypeController {
     return this.informationTypeService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateInformationTypeDto: UpdateInformationTypeDto) {
     return this.informationTypeService.update(+id, updateInformationTypeDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.informationTypeService.remove(+id);
   }

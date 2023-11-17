@@ -1,7 +1,8 @@
 import { Information } from "src/information/entities/information.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity({ name:"information_type" })
+@Unique(['type'])
 export class InformationType {
 
     @PrimaryGeneratedColumn()
@@ -17,8 +18,8 @@ export class InformationType {
         this.type = type;
     }
 
-    public getType(type:string):string{
-        return type;
+    public getType():string{
+        return this.type;
     }
 
     public setType(type:string):void{
