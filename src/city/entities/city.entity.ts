@@ -7,7 +7,6 @@ import { Information } from "src/information/entities/information.entity";
 import { Institution } from "src/institution/entities/institution.entity";
 
 @Entity({ name:'city' })
-@Unique(['zipCode'])
 export class City {
 
     @PrimaryGeneratedColumn()
