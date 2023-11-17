@@ -22,10 +22,10 @@ export class AdoptionController {
     return await this.adoptionService.findOne(updateAdoptionDto);
   }
 
-  @Put('modificar/:id')
-  async updateAdoption(@Param('id') id: number, @Body() updateAdoptionDto:UpdateAdoptionDto):Promise<Adoption> {
-    return await this.adoptionService.update(id,updateAdoptionDto);
-  }
+  // @Put('modificar/:id')
+  // async updateAdoption(@Param('id') id: number, @Body() updateAdoptionDto:UpdateAdoptionDto):Promise<Adoption> {
+  //   return await this.adoptionService.update(id,updateAdoptionDto);
+  // }
 
   @Delete('eliminar/:id')
   async removeAdoption(@Param('id') id:number,@Body() updateAdoptionDto:UpdateAdoptionDto):Promise<string> {

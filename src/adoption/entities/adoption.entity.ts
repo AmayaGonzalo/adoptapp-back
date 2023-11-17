@@ -12,15 +12,15 @@ export class Adoption {
     @CreateDateColumn()
     adoption: Date;
 
-    @OneToOne(()=>Pet)
+    @ManyToOne(()=>Pet, {nullable: false})
     @JoinColumn()
     pet: Pet;
     
-    @ManyToOne(()=>City,city=>city.adoptions)
+    @ManyToOne(()=>City,city=>city.adoptions, {nullable: false})
     @JoinColumn()
     city: City;
 
-    @ManyToOne(()=>Client,client=>client.adoptions)
+    @ManyToOne(()=>Client,client=>client.adoptions, {nullable: false})
     @JoinColumn()
     client: Client;
 

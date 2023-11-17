@@ -20,7 +20,7 @@ export class AdoptionService {
               private readonly clientRepository:Repository<Client>
   ){}
 
-  async create(updateAdoptionDto:UpdateAdoptionDto):Promise<{ cityName: string, petName: string, clientName: string }> {
+  async create(updateAdoptionDto:UpdateAdoptionDto):Promise<{ cityName: string, petName: string, clientName: string, msj: string }> {
     try{
       const { petId, cityId, clientId } = updateAdoptionDto;
       let pet: Pet = await this.petRepository.findOne({ where:{id:petId} });
@@ -35,7 +35,7 @@ export class AdoptionService {
           if(!client){
             throw new Error('No se encuentra registrado el cliente');
           }else{
-            const adoption: Adoption = await this.adoptionRepository.save(new Adoption());            
+            const adoption: Adoption = await this.adoptionRepository.create();            
             adoption.city = city;
             adoption.pet = pet;
             adoption.client = client;            
@@ -43,7 +43,8 @@ export class AdoptionService {
             return {
               cityName: adoption.city.name,
               petName: adoption.pet.name,
-              clientName: adoption.client.name + ' ' + adoption.client.surname
+              clientName: adoption.client.name + ' ' + adoption.client.surname,
+              msj: "adopción procesada"
             }
           }
         }
