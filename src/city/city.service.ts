@@ -96,7 +96,7 @@ export class CityService {
         throw new Error('Lo siento, no se encontró la ciudad que desea eliminar');
       }else{
         await this.cityRepository.remove(city);
-        return `Se ha eliminado exitosamente`;
+        return 'Se ha eliminado la ciudad ' + city.name + ' exitosamente';
       }
     }
     catch(error){
