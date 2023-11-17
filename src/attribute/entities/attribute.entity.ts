@@ -1,7 +1,8 @@
 import { Pet } from "src/pet/entities/pet.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, Unique } from "typeorm";
 
 @Entity({ name: 'attribute' })
+@Unique(['name'])
 export class Attribute {
 
     @PrimaryGeneratedColumn()
