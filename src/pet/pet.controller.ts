@@ -12,6 +12,7 @@ export class PetController {
     return await this.petService.createNewPet(createPetDto);
   }
 
+  //corregir
   @Get()
   async findAllPet():Promise<PetDto[]> {
     return await this.petService.findAll();
@@ -37,8 +38,8 @@ export class PetController {
     return await this.petService.update(id, updatePetDto);
   }
 
-  // @Delete('eliminar/:id')
-  // async removePet(@Param('id') id:number):Promise<string> {
-  //   return await this.petService.remove(id);
-  //}
+  @Delete('eliminar/:id')
+  async removePet(@Param('id') id:number):Promise<string> {
+    return await this.petService.remove(id);
+  }
 }

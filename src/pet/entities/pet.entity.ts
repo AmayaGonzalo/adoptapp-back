@@ -128,4 +128,12 @@ export class Pet {
     public setInterested(interested:number):void{
         this.interested = interested;
     }
+
+    public getAttributes(): Attribute[] {
+        return this.attributes;
+    }
+
+    public setAttributes(paramAttributes: Attribute[]):void{
+        this.attributes = paramAttributes;
+    }
 }

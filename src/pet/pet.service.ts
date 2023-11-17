@@ -57,7 +57,6 @@ export class PetService {
         skip: skipItems
       };
       const leakedPets = await this.petRepository.find(criterion);
-      console.log(leakedPets);
 
       if (!leakedPets) {
         throw new Error('Pet capture error.');
@@ -68,7 +67,8 @@ export class PetService {
         sex: pet.sex,
         age: pet.age,
         specie: pet.specie,
-        attributes : [ { attribut : "Desparacitado"}],
+        attributes : [ { attribut : "a"}],
+        //attributes : pet.getAttributes(),  
         description: pet.description,
         urlImg: pet.url_img,
         interested: pet.interested,
@@ -143,6 +143,10 @@ export class PetService {
           pet.setDescription(updatePetDto.description);
           pet = await this.petRepository.save(pet);
         }
+        if(updatePetDto.attributes != null || updatePetDto.attributes != undefined){
+          pet.setAttributes(updatePetDto.attributes);
+          pet = await this.petRepository.save(pet);
+        }
         return pet;
       }
     }
@@ -154,21 +158,21 @@ export class PetService {
     }
   }
 
-//   async remove(id: number):Promise<string> {
-//     try{
-//       const pet: Pet = await this.petRespository.findOne({ where:{id:id} });
-//       if(!pet){
-//         throw new Error('Lo siento, no se encontró la mascota que desea eliminar');
-//       }else{
-//         await this.petRespository.remove(pet);
-//         return `Se eliminó exitosamente ${pet.name}`;
-//       }    
-//     } 
-//     catch(error){
-//       throw new HttpException({
-//         status: HttpStatus.CONFLICT,
-//         error: 'Error en Mascotas - ' + error
-//       },HttpStatus.NOT_FOUND);
-//     }
-//   }
+  async remove(id: number):Promise<string> {
+    try{
+      const pet: Pet = await this.petRepository.findOne({ where:{id:id} });
+      if(!pet){
+        throw new Error('Lo siento, no se encontró la mascota que desea eliminar');
+      }else{
+        await this.petRepository.remove(pet);
+        return `Se eliminó exitosamente ${pet.name}`;
+      }    
+    } 
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Mascotas - ' + error
+      },HttpStatus.NOT_FOUND);
+    }
+  }
   }

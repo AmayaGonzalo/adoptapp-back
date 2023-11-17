@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Attribute } from "src/attribute/entities/attribute.entity";
 
 export class UpdatePetDto{
     @IsString()
@@ -23,4 +24,8 @@ export class UpdatePetDto{
     @IsString()
     @IsNotEmpty()
     readonly url_img: string;
+
+    @IsString()
+    @IsNotEmpty()
+    readonly attributes: Attribute[];
 }
