@@ -7,7 +7,7 @@ import { UpdateComplaintTypeDto } from './dto/update-complaint_type.dto';
 export class ComplaintTypeController {
   constructor(private readonly complaintTypeService: ComplaintTypeService) {}
 
-  @Post()
+  @Post('create-complaint')
   create(@Body() createComplaintTypeDto: CreateComplaintTypeDto) {
     return this.complaintTypeService.create(createComplaintTypeDto);
   }
@@ -18,16 +18,16 @@ export class ComplaintTypeController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.complaintTypeService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateComplaintTypeDto: UpdateComplaintTypeDto) {
     return this.complaintTypeService.update(+id, updateComplaintTypeDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.complaintTypeService.remove(+id);
   }

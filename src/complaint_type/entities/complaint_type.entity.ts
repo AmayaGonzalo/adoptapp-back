@@ -1,11 +1,12 @@
 import { Complaint } from "src/complaint/entities/complaint.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity( { name: "complaint_type"})
-export class ComplaintType {
+@Unique(["type"])
+export class ComplaintTypeDTO {
 
     @PrimaryGeneratedColumn()
-    int: Number;
+    id: number;
 
     @Column()
     type: string;
