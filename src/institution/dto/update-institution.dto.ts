@@ -1,3 +1,11 @@
+import { IsNotEmpty, IsString } from "class-validator";
 
+export class UpdateInstitutionDto  {
+    @IsString()
+    @IsNotEmpty()
+    readonly name:string;
 
-export class UpdateInstitutionDto  {}
+    @IsString()
+    @IsNotEmpty()
+    readonly address:string;
+}

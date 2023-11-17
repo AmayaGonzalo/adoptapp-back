@@ -1,34 +1,35 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { InstitutionService } from './institution.service';
-import { InstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
+import { InstitutionDTO } from './entities/institution.entity';
+import { CreateInstitutionDto } from './dto/create-institution.dto';
 
 @Controller('institution')
 export class InstitutionController {
   constructor(private readonly institutionService: InstitutionService) {}
 
-  @Post('nuevo')
-  async createNew(@Body() institutionDto: InstitutionDto):Promise<InstitutionDto> {
+  @Post('create')
+  async createNew(@Body() institutionDto: InstitutionDTO):Promise<CreateInstitutionDto> {
     return await this.institutionService.create(institutionDto);
   }
 
   @Get()
-  findAll() {
+  async findAll():Promise<InstitutionDTO[]> {
     return this.institutionService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string):Promise<InstitutionDTO> {
     return this.institutionService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInstitutionDto: UpdateInstitutionDto) {
+  @Patch('update/:id')
+  async update(@Param('id') id: string, @Body() updateInstitutionDto: UpdateInstitutionDto):Promise<InstitutionDTO> {
     return this.institutionService.update(+id, updateInstitutionDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete('delete/:id')
+  async remove(@Param('id') id: string):Promise<string> {
     return this.institutionService.remove(+id);
   }
 }

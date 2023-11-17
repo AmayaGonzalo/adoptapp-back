@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class InstitutionDto {
+export class CreateInstitutionDto {
     
     @IsString()
     @IsNotEmpty()
