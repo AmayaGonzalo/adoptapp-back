@@ -121,7 +121,7 @@ export class ClientService {
         throw new Error('Lo siento, no se encontró el cliente que desea eliminar');
       }else{
         await this.clientRepository.remove(client);
-        return `Se eliminó exitosamente`;
+        return 'Se eliminó al cliente ' + client.name + 'exitosamente';
       }    
     } 
     catch(error){

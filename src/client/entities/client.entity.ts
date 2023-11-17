@@ -2,9 +2,11 @@ import { Adoption } from "src/adoption/entities/adoption.entity";
 import { City } from "src/city/entities/city.entity";
 import { Pet } from "src/pet/entities/pet.entity";
 import { User } from "src/user/entities/user.entity";
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, Unique } from "typeorm";
 
 @Entity({ name:'client'})
+@Unique(["email"])
+@Unique(["phoneNumber"])
 export class Client {
 
     @PrimaryGeneratedColumn()
