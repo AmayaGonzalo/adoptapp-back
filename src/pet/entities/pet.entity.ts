@@ -3,7 +3,7 @@ import { Adoption } from "src/adoption/entities/adoption.entity";
 import { Attribute } from "src/attribute/entities/attribute.entity";
 import { Client } from "src/client/entities/client.entity";
 import { InstitutionDTO } from "src/institution/entities/institution.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'pet' })
 export class Pet {
@@ -50,8 +50,9 @@ export class Pet {
     @JoinColumn()
     institution: InstitutionDTO;
 
-    @OneToOne(()=>Adoption,adoption=>adoption.pet)    
-    adoption: Adoption;
+    @OneToMany(()=>Adoption,adoption=>adoption.pet)
+    @JoinColumn({ name: 'petId'})    
+    adoption: Adoption[];
 
     
     constructor(name:string, specie:string, sex:string, age:number, url_img?:string, description?:string, attributes?: Attribute[]){
