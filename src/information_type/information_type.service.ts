@@ -1,19 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateInformationTypeDto } from './dto/create-information_type.dto';
 import { UpdateInformationTypeDto } from './dto/update-information_type.dto';
-import { InformationType } from './entities/information_type.entity';
+import { InformationTypeDTO } from './entities/information_type.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class InformationTypeService {
-  constructor(@InjectRepository(InformationType)
-  private readonly informationTypeRepository:Repository<InformationType>){}
+  constructor(@InjectRepository(InformationTypeDTO)
+  private readonly informationTypeRepository:Repository<InformationTypeDTO>){}
 
   async create(createInformationTypeDto: CreateInformationTypeDto) {
     try{
       const { type } = createInformationTypeDto;
-      const newType: CreateInformationTypeDto = await this.informationTypeRepository.save(new InformationType(type));
+      const newType: CreateInformationTypeDto = await this.informationTypeRepository.save(new InformationTypeDTO(type));
       if(!newType){
         throw new Error('No se ha podido crear el nuevo tipo');
       }else{
@@ -35,7 +35,7 @@ export class InformationTypeService {
 
   async findOne(id: number) {
     try{
-      const type: InformationType = await this.informationTypeRepository.findOne({ where:{id:id} });
+      const type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id:id} });
       if(!type){
         throw new Error('No se ha encontrado ese tipo');
       }else{
@@ -52,7 +52,7 @@ export class InformationTypeService {
 
   async update(id: number, updateInformationTypeDto: UpdateInformationTypeDto) {
     try{
-      let type: InformationType = await this.informationTypeRepository.findOne({ where:{id: id} });
+      let type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id: id} });
       if(!type){
         throw new Error('Lo siento, no encontramos el tipo que buscas');
       }else{
@@ -73,7 +73,7 @@ export class InformationTypeService {
 
   async remove(id: number) {
     try{
-      let type: InformationType = await this.informationTypeRepository.findOne({ where:{id: id} });
+      let type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id: id} });
       if(!type){
         throw new Error('Lo siento, no se encontró el tipo que desea eliminar');
       }else{
