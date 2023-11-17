@@ -23,8 +23,8 @@ export class ComplaintTypeController {
   }
 
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updateComplaintTypeDto: UpdateComplaintTypeDto) {
-    return this.complaintTypeService.update(+id, updateComplaintTypeDto);
+  update(@Param('id') id: number, @Body() updateComplaintTypeDto: UpdateComplaintTypeDto) {
+    return this.complaintTypeService.update(id, updateComplaintTypeDto);
   }
 
   @Delete('delete/:id')
