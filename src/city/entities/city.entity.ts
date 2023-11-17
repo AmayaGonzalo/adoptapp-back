@@ -1,12 +1,13 @@
 import { IsNotEmpty } from "class-validator";
 import { Adoption } from "src/adoption/entities/adoption.entity";
 import { Client } from "src/client/entities/client.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { Complaint } from "src/complaint/entities/complaint.entity";
 import { Information } from "src/information/entities/information.entity";
 import { Institution } from "src/institution/entities/institution.entity";
 
 @Entity({ name:'city' })
+@Unique(['zipCode'])
 export class City {
 
     @PrimaryGeneratedColumn()
