@@ -7,7 +7,7 @@ import { UpdateComplainantDto } from './dto/update-complainant.dto';
 export class ComplainantsController {
   constructor(private readonly complainantsService: ComplainantsService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createComplainantDto: CreateComplainantDto) {
     return this.complainantsService.create(createComplainantDto);
   }
@@ -22,12 +22,12 @@ export class ComplainantsController {
     return this.complainantsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateComplainantDto: UpdateComplainantDto) {
     return this.complainantsService.update(+id, updateComplainantDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.complainantsService.remove(+id);
   }

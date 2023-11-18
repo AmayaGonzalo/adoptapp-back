@@ -7,10 +7,10 @@ export class Complainant {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column( {nullable: false} )
     email: string;
 
-    @Column()
+    @Column( {nullable: false} )
     phoneNumber: number;
 
     @OneToOne(()=>Complaint)
