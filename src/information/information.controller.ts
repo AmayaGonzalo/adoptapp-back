@@ -7,7 +7,7 @@ import { UpdateInformationDto } from './dto/update-information.dto';
 export class InformationController {
   constructor(private readonly informationService: InformationService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createInformationDto: CreateInformationDto) {
     return this.informationService.create(createInformationDto);
   }
@@ -22,12 +22,12 @@ export class InformationController {
     return this.informationService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateInformationDto: UpdateInformationDto) {
     return this.informationService.update(+id, updateInformationDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.informationService.remove(+id);
   }
