@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeo
 
 @Entity({ name:"information_type" })
 @Unique(['type'])
-export class InformationTypeDTO {
+export class InformationType {
 
     @PrimaryGeneratedColumn()
     id: number;

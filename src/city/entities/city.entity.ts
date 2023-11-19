@@ -4,7 +4,7 @@ import { Client } from "src/client/entities/client.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { Complaint } from "src/complaint/entities/complaint.entity";
 import { Information } from "src/information/entities/information.entity";
-import { InstitutionDTO } from "src/institution/entities/institution.entity";
+import { Institution } from "src/institution/entities/institution.entity";
 
 @Entity({ name:'city' })
 export class City {
@@ -19,8 +19,8 @@ export class City {
     @Column()
     zipCode: number;
 
-    @OneToMany(()=>InstitutionDTO, institutions=>institutions.city)
-    institutions: InstitutionDTO[];
+    @OneToMany(()=>Institution, institutions=>institutions.city)
+    institutions: Institution[];
 
     @OneToMany(()=>Client, clients=>clients.city)
     clients:Client[];

@@ -1,19 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateInformationTypeDto } from './dto/create-information_type.dto';
 import { UpdateInformationTypeDto } from './dto/update-information_type.dto';
-import { InformationTypeDTO } from './entities/information_type.entity';
+import { InformationType } from './entities/information_type.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class InformationTypeService {
-  constructor(@InjectRepository(InformationTypeDTO)
-  private readonly informationTypeRepository:Repository<InformationTypeDTO>){}
+  constructor(@InjectRepository(InformationType)
+  private readonly informationTypeRepository:Repository<InformationType>){}
 
   async create(createInformationTypeDto: CreateInformationTypeDto) {
     try{
       const { type } = createInformationTypeDto;
-      const newType: CreateInformationTypeDto = await this.informationTypeRepository.save(new InformationTypeDTO(type));
+      const newType: CreateInformationTypeDto = await this.informationTypeRepository.save(new InformationType(type));
       if(!newType){
         throw new Error('No se ha podido crear el nuevo tipo');
       }else{
@@ -28,14 +28,14 @@ export class InformationTypeService {
     }
   }
 
-  async findAll():Promise<InformationTypeDTO[]> {
+  async findAll():Promise<InformationType[]> {
     const informationTypeTotal = await this.informationTypeRepository.find();
     return informationTypeTotal;
   }
 
-  async findOne(id: number):Promise<InformationTypeDTO> {
+  async findOne(id: number):Promise<InformationType> {
     try{
-      const type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id:id} });
+      const type: InformationType = await this.informationTypeRepository.findOne({ where:{id:id} });
       if(!type){
         throw new Error('No se ha encontrado ese tipo');
       }else{
@@ -50,9 +50,9 @@ export class InformationTypeService {
     }
   }
 
-  async update(id: number, updateInformationTypeDto: UpdateInformationTypeDto):Promise<InformationTypeDTO> {
+  async update(id: number, updateInformationTypeDto: UpdateInformationTypeDto):Promise<InformationType> {
     try{
-      let type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id: id} });
+      let type: InformationType = await this.informationTypeRepository.findOne({ where:{id: id} });
       if(!type){
         throw new Error('Lo siento, no encontramos el tipo que buscas');
       }else{
@@ -73,7 +73,7 @@ export class InformationTypeService {
 
   async remove(id: number):Promise<string> {
     try{
-      let type: InformationTypeDTO = await this.informationTypeRepository.findOne({ where:{id: id} });
+      let type: InformationType = await this.informationTypeRepository.findOne({ where:{id: id} });
       if(!type){
         throw new Error('Lo siento, no se encontró el tipo que desea eliminar');
       }else{

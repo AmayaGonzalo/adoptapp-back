@@ -2,18 +2,18 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateComplaintTypeDto } from './dto/create-complaint_type.dto';
 import { UpdateComplaintTypeDto } from './dto/update-complaint_type.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ComplaintTypeDTO } from './entities/complaint_type.entity';
+import { ComplaintType } from './entities/complaint_type.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class ComplaintTypeService {
-  constructor(@InjectRepository(ComplaintTypeDTO)
-              private readonly complaintRepository:Repository<ComplaintTypeDTO>
+  constructor(@InjectRepository(ComplaintType)
+              private readonly complaintRepository:Repository<ComplaintType>
               ){}
 
-  async create(createComplaintTypeDto: CreateComplaintTypeDto):Promise<ComplaintTypeDTO> {
+  async create(createComplaintTypeDto: CreateComplaintTypeDto):Promise<ComplaintType> {
     try {
-      let newComplaint: ComplaintTypeDTO = await this.complaintRepository.save(new ComplaintTypeDTO(createComplaintTypeDto.type))
+      let newComplaint: ComplaintType = await this.complaintRepository.save(new ComplaintType(createComplaintTypeDto.type))
       if(!newComplaint) {
         throw new Error ('No se pudo crear el complaint')
       } else {
@@ -28,9 +28,9 @@ export class ComplaintTypeService {
     }
   }
 
-  async findAll():Promise<ComplaintTypeDTO[]> {
+  async findAll():Promise<ComplaintType[]> {
     try {
-      const allComplaintTypes: ComplaintTypeDTO[] = await this.complaintRepository.find()
+      const allComplaintTypes: ComplaintType[] = await this.complaintRepository.find()
       if(!allComplaintTypes) {
         throw new Error ('no se pudo encontrar complaint types')
       } else {
@@ -45,9 +45,9 @@ export class ComplaintTypeService {
     }
   }
 
-  async findOne(id: number):Promise<ComplaintTypeDTO> {
+  async findOne(id: number):Promise<ComplaintType> {
     try {
-      const complaint: ComplaintTypeDTO = await this.complaintRepository.findOne({ where:{id:id}})
+      const complaint: ComplaintType = await this.complaintRepository.findOne({ where:{id:id}})
       if(!complaint) {
         throw new Error ('no se pudo encontrar complaint')
       } else {
@@ -62,9 +62,9 @@ export class ComplaintTypeService {
     }
   }
 
-  async update(id: number, updateComplaintTypeDto: UpdateComplaintTypeDto):Promise<ComplaintTypeDTO> {
+  async update(id: number, updateComplaintTypeDto: UpdateComplaintTypeDto):Promise<ComplaintType> {
     try {
-      let complaint: ComplaintTypeDTO = await this.complaintRepository.findOne({ where:{id:id}})
+      let complaint: ComplaintType = await this.complaintRepository.findOne({ where:{id:id}})
       if(!complaint) {
         throw new Error ('no se pudo encontrar complaint')
       } else {
@@ -85,7 +85,7 @@ export class ComplaintTypeService {
 
   async remove(id: number):Promise<string> {
     try {
-      let complaint: ComplaintTypeDTO = await this.complaintRepository.findOne({ where:{id:id}})
+      let complaint: ComplaintType = await this.complaintRepository.findOne({ where:{id:id}})
       if(!complaint) {
         throw new Error ('no se pudo encontrar complaint')
       } else {
