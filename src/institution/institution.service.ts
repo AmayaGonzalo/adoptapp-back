@@ -2,21 +2,21 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InstitutionDTO } from './entities/institution.entity';
+import { Institution } from './entities/institution.entity';
 import { Repository } from 'typeorm';
 import { InformationTypeDTO } from 'src/information_type/entities/information_type.entity';
 
 @Injectable()
 export class InstitutionService {
 
-  constructor(@InjectRepository(InstitutionDTO)
-              private readonly institutionRepository:Repository<InstitutionDTO>
+  constructor(@InjectRepository(Institution)
+              private readonly institutionRepository:Repository<Institution>
               ){}
 
-  async create(institutionDto: InstitutionDTO):Promise<CreateInstitutionDto> {
+  async create(institutionDto: Institution):Promise<CreateInstitutionDto> {
     try {
       const { name, address } = institutionDto;
-      const newInstitution : CreateInstitutionDto = await this.institutionRepository.save(new InstitutionDTO(name,address));
+      const newInstitution : CreateInstitutionDto = await this.institutionRepository.save(new Institution(name,address));
       if(!newInstitution){
         throw new Error('No se pudo crear la nueva institución')
       }else{
@@ -32,14 +32,14 @@ export class InstitutionService {
     }  
   }
 
-  async findAll():Promise<InstitutionDTO[]> {
+  async findAll():Promise<Institution[]> {
     const institutionTotal = await this.institutionRepository.find();
     return institutionTotal;
   }
 
-  async findOne(id: number):Promise<InstitutionDTO> {
+  async findOne(id: number):Promise<Institution> {
     try{
-      const type: InstitutionDTO = await this.institutionRepository.findOne({ where:{id:id} });
+      const type: Institution = await this.institutionRepository.findOne({ where:{id:id} });
       if(!type){
         throw new Error('No se ha encontrado esta institucion');
       }else{
@@ -54,9 +54,9 @@ export class InstitutionService {
     }
   }
 
-  async update(id: number, updateInstitutionDto: UpdateInstitutionDto):Promise<InstitutionDTO> {
+  async update(id: number, updateInstitutionDto: UpdateInstitutionDto):Promise<Institution> {
     try{
-      let institution: InstitutionDTO = await this.institutionRepository.findOne({ where:{id: id} });
+      let institution: Institution = await this.institutionRepository.findOne({ where:{id: id} });
       if(!institution){
         throw new Error('Lo siento, no encontramos el tipo que buscas');
       }else{
@@ -81,7 +81,7 @@ export class InstitutionService {
 
   async remove(id: number):Promise<string> {
     try{
-      let institution: InstitutionDTO = await this.institutionRepository.findOne({ where:{id: id} });
+      let institution: Institution = await this.institutionRepository.findOne({ where:{id: id} });
       if(!institution){
         throw new Error('Lo siento, no se encontró el tipo que desea eliminar');
       }else{

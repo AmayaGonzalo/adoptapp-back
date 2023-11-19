@@ -3,7 +3,7 @@ import { Pet } from "src/pet/entities/pet.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name:"institution" })
-export class InstitutionDTO {
+export class Institution {
 
     @PrimaryGeneratedColumn()
     id: number;
