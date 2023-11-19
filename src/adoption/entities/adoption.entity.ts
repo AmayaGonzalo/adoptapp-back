@@ -1,7 +1,7 @@
 import { City } from "src/city/entities/city.entity";
 import { Pet } from "src/pet/entities/pet.entity";
 import { Client } from "src/client/entities/client.entity";
-import { CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'adoption' })
 export class Adoption {
