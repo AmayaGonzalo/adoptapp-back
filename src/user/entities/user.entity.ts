@@ -1,7 +1,8 @@
 import { Client } from "src/client/entities/client.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity({ name:"user" })
+@Unique(['username'])
 export class User {
 
     @PrimaryGeneratedColumn()
@@ -10,10 +11,10 @@ export class User {
     @Column({ type:'tinyint', default: 1 })
     state: number;
 
-    @Column()
+    @Column({ nullable: false })
     username: string;
 
-    @Column()
+    @Column({ nullable: false })
     password: string;
 
     @OneToOne(()=>Client, client=>client.user)
