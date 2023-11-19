@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 import { Adoption } from "src/adoption/entities/adoption.entity";
 import { Attribute } from "src/attribute/entities/attribute.entity";
 import { Client } from "src/client/entities/client.entity";
-import { InstitutionDTO } from "src/institution/entities/institution.entity";
+import { Institution } from "src/institution/entities/institution.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'pet' })
@@ -46,9 +46,9 @@ export class Pet {
     @JoinTable({ name: "interested_client" })
     clients: Client[];
 
-    @ManyToOne(()=>InstitutionDTO,institution=>institution.pets)
+    @ManyToOne(()=>Institution,institution=>institution.pets)
     @JoinColumn()
-    institution: InstitutionDTO;
+    institution: Institution;
 
     @OneToMany(()=>Adoption,adoption=>adoption.pet)
     @JoinColumn({ name: 'petId'})    

@@ -4,7 +4,6 @@ import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Institution } from './entities/institution.entity';
 import { Repository } from 'typeorm';
-import { InformationTypeDTO } from 'src/information_type/entities/information_type.entity';
 
 @Injectable()
 export class InstitutionService {

@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { InformationTypeService } from './information_type.service';
 import { CreateInformationTypeDto } from './dto/create-information_type.dto';
 import { UpdateInformationTypeDto } from './dto/update-information_type.dto';
-import { InformationTypeDTO } from './entities/information_type.entity';
+import { InformationType } from './entities/information_type.entity';
 
 @Controller('information-type')
 export class InformationTypeController {
@@ -14,17 +14,17 @@ export class InformationTypeController {
   }
 
   @Get()
-  async findAll(): Promise<InformationTypeDTO[]> {
+  async findAll(): Promise<InformationType[]> {
     return this.informationTypeService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<InformationTypeDTO> {
+  async findOne(@Param('id') id: number): Promise<InformationType> {
     return this.informationTypeService.findOne(id);
   }
 
   @Patch('update/:id')
-  async update(@Param('id') id: string, @Body() updateInformationTypeDto: UpdateInformationTypeDto): Promise<InformationTypeDTO> {
+  async update(@Param('id') id: string, @Body() updateInformationTypeDto: UpdateInformationTypeDto): Promise<InformationType> {
     return this.informationTypeService.update(+id, updateInformationTypeDto);
   }
 
