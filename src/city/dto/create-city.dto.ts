@@ -8,5 +8,5 @@ export class CityDto {
 
     @IsNumber()
     @IsNotEmpty()
-    zipCode: number;
+    zipCode: string;
 }

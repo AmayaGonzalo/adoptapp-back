@@ -17,7 +17,7 @@ export class City {
     name: string;
 
     @Column()
-    zipCode: number;
+    zipCode: string;
 
     @OneToMany(()=>Institution, institutions=>institutions.city)
     institutions: Institution[];
@@ -34,7 +34,7 @@ export class City {
     @OneToMany(()=>Information, informations=>informations.city)
     informations: Information[];
 
-    constructor(name:string, zipCode:number){
+    constructor(name:string, zipCode:string){
         this.name = name;
         this.zipCode = zipCode;
     }
@@ -47,11 +47,11 @@ export class City {
         this.name = name;
     }
 
-    public getZipCode():number{
+    public getZipCode():string{
         return this.zipCode;
     }
 
-    public setZipCode(zipCode:number):void{
+    public setZipCode(zipCode:string):void{
         this.zipCode = zipCode;
     }
 }
