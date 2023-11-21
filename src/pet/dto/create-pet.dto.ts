@@ -2,7 +2,7 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { Attribute } from "src/attribute/entities/attribute.entity";
 import { PrimaryColumn } from "typeorm";
 
-export class PetDto {
+export class CreatePetDto {
     @PrimaryColumn()
     readonly id: number;
 
@@ -34,5 +34,6 @@ export class PetDto {
     readonly attributes: Attribute[];
 
     @IsNumber()
-    readonly interested: number;
+    @IsNotEmpty()
+    readonly institution_id : number;
 }

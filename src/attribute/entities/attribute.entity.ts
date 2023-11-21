@@ -1,5 +1,5 @@
 import { Pet } from "src/pet/entities/pet.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, Unique } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, Unique, JoinTable } from "typeorm";
 
 @Entity({ name: 'attribute' })
 @Unique(['name'])
@@ -12,6 +12,7 @@ export class Attribute {
     name: string;
 
     @ManyToMany(()=> Pet, pets=>pets.attributes)
+    @JoinTable({ name: 'pets_attributes' })
     pets: Pet[];
 
     constructor(name:string){
