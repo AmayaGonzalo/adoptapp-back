@@ -35,7 +35,7 @@ export class PetService {
       if(!newPet){
         throw new Error('No se ha podido crear la mascota');
       }else{
-        return newPet.name;
+                return newPet.name;
       }
     }
     catch(error){
@@ -49,7 +49,6 @@ export class PetService {
   private async confirmValues(createPetDto: CreatePetDto):Promise<Pet> {
     const { name, specie, sex, age, description, url_img, attributes, institution_id} = createPetDto;
     const newPet: Pet = new Pet(name, specie, sex, age, url_img, description);
-    const criterion: FindOneOptions = { where: { institution_id: Number(institution_id) } };
     const institutionId = await this.checkInsitution(institution_id);
     if (institutionId === null) {
       // Manejar la situación en la que la institución no existe
@@ -80,7 +79,6 @@ export class PetService {
       let attributeName: string = myAttribute.toString();
       attributeName.toLowerCase()
       myAttribute = await this.attributRepository.findOne({ where: { name: attributeName.toLowerCase() } });
-      console.log(JSON.stringify(myAttribute, null, 2));
       if (myAttribute === null) {
         return false;
       } else {
@@ -134,6 +132,7 @@ export class PetService {
         const filter = {
           ...(specie ? { specie } : {}),
           //...(location_id ? { fk_city_id: Number(location_id) } : {}),
+          //...(location_id ? { institution : { fk_city_id : location_id }} : {}),
           ...(sex ? { sex } : {})
         }
         const criterion: FindManyOptions = {
@@ -165,6 +164,7 @@ export class PetService {
           description: pet.description,
           url_img: pet.url_img,
           interested: pet.interested,
+          institution : pet.institution.name
         }));
         return petData;
       } catch (error) {
