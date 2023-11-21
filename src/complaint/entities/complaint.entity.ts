@@ -19,12 +19,26 @@ export class Complaint {
     
     @Column()
     url_img: string;
-    
-    @OneToOne(()=>Complainant,complainant=>complainant.complaint)
-    complainant: Complainant;
 
-    @ManyToOne(()=>City, city=>city.complaints)
-    @JoinColumn()
+    @Column()
+    fk_complaint_type_id: number;
+
+    @Column()
+    fk_city_id: number;
+
+    @Column()
+    fk_complainant_id: number;
+
+    @ManyToOne(() => ComplaintType, complaintType => complaintType.complaints)
+    @JoinColumn({ name: 'fk_complaint_type_id' })
+    complaintType: ComplaintType;
+
+    @ManyToOne(() => Complainant, complainant => complainant.complaints)
+    @JoinColumn({ name: 'fk_complainant_id' })
+    complainants: Complainant;
+
+    @ManyToOne(() => City, city => city.complaints)
+    @JoinColumn({ name: 'fk_city_id' })
     city: City;
 
     @ManyToOne(()=>ComplaintType,complaint_type=>complaint_type.complaints)

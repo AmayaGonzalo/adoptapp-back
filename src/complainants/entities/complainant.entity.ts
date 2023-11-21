@@ -1,5 +1,5 @@
 import { Complaint } from "src/complaint/entities/complaint.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'complainant'})
 export class Complainant {
@@ -13,9 +13,8 @@ export class Complainant {
     @Column( {nullable: false} )
     phoneNumber: number;
 
-    @OneToOne(()=>Complaint)
-    @JoinColumn()
-    complaint: Complaint;
+    @OneToMany(() => Complaint, complaint => complaint.complainants)
+    complaints: Complaint[];
 
     constructor(email:string, phoneNumber:number){
         this.email = email;
