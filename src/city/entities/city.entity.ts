@@ -5,6 +5,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeo
 import { Complaint } from "src/complaint/entities/complaint.entity";
 import { Information } from "src/information/entities/information.entity";
 import { Institution } from "src/institution/entities/institution.entity";
+import { Pet } from "src/pet/entities/pet.entity";
 
 @Entity({ name:'city' })
 export class City {

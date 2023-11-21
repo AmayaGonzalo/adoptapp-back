@@ -3,9 +3,10 @@ import { CityService } from './city.service';
 import { CityController } from './city.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { City } from './entities/city.entity';
+import { Pet } from 'src/pet/entities/pet.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([City])],
+  imports: [TypeOrmModule.forFeature([City, Pet])],
   controllers: [CityController],
   providers: [CityService],
 })
