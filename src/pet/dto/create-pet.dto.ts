@@ -31,7 +31,7 @@ export class CreatePetDto {
     readonly url_img: string;
 
     @IsString()
-    readonly attributes: Attribute[];
+    readonly attributes: string[];
 
     @IsNumber()
     @IsNotEmpty()

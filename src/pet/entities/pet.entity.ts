@@ -1,10 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 import { Adoption } from "src/adoption/entities/adoption.entity";
 import { Attribute } from "src/attribute/entities/attribute.entity";
-import { City } from "src/city/entities/city.entity";
 import { Client } from "src/client/entities/client.entity";
 import { Institution } from "src/institution/entities/institution.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity({ name: 'pet' })
 export class Pet {
@@ -42,8 +41,8 @@ export class Pet {
     @Column({ name: 'fk_institution_id', nullable: false })
     fk_institution_id: number;  
 
-    @ManyToMany(()=> Attribute, attributes=>attributes.pets)
-    @JoinTable({ name: "pets_attributes" })
+    @ManyToMany(() => Attribute)
+    @JoinTable({name: "pets_attributes"})
     attributes: Attribute[];
 
     @ManyToMany(()=> Client, clients=> clients.pets)

@@ -30,12 +30,15 @@ export class PetService {
 
   async createNewPet(createPetDto: CreatePetDto):Promise<string> {
     try{
-      let newPet: Pet = await this.confirmValues(createPetDto)
-      newPet = await this.petRepository.save(newPet);
+      const { name, specie, sex, age, description, url_img, attributes, institution_id} = createPetDto;
+      const newPet: Pet = new Pet(name, specie, sex, age, url_img, description);
+      newPet.attributes = await this.handleAttributes(attributes)
+      newPet.fk_institution_id = await this.checkInsitution(institution_id);
+      console.log(await this.petRepository.save(newPet));
       if(!newPet){
         throw new Error('No se ha podido crear la mascota');
       }else{
-                return newPet.name;
+        return newPet.name;
       }
     }
     catch(error){
@@ -46,21 +49,49 @@ export class PetService {
     }
   }
 
-  private async confirmValues(createPetDto: CreatePetDto):Promise<Pet> {
-    const { name, specie, sex, age, description, url_img, attributes, institution_id} = createPetDto;
-    const newPet: Pet = new Pet(name, specie, sex, age, url_img, description);
-    const institutionId = await this.checkInsitution(institution_id);
-    if (institutionId === null) {
-      // Manejar la situación en la que la institución no existe
-      throw new Error('La institución no existe');
+  async handleAttributes(attributes: string[]): Promise<Attribute[]> {
+    if (attributes.length === 0) {
+      throw new Error(`Enter an attribute for the pet.`);
     }
-    //newPet.attributes = await this.handleAttributes(attributes);
-    newPet.attributes = await this.attributesCheck(newPet, attributes);
-    console.log(attributes);
-    console.log(newPet);
-    newPet.fk_institution_id = institutionId;
-    return newPet;
+    try {
+
+      const attributesCriteria: FindManyOptions = { where: attributes.map(name => ({ name: name })) };
+      const existingAttributes = await this.attributRepository.find(attributesCriteria);
+      const attributeToCreate = attributes.filter(attribute => !existingAttributes.some(existingAttributes => existingAttributes.name.toLowerCase() === attribute.toLowerCase()));
+
+      const newAttributes = await Promise.all(
+        attributeToCreate.map(async attribute => {
+          const newAttribute = new Attribute(attribute);
+          return await this.attributRepository.save(newAttribute);
+        })
+      );
+
+      const petAttributes = [...existingAttributes, ...newAttributes];
+
+      return petAttributes;
+    } catch (error) {
+      throw new error(`Error getting attributes - ` + error.message);
+    }
   }
+
+  // private async confirmValues(createPetDto: CreatePetDto):Promise<Pet> {
+  //   const { name, specie, sex, age, description, url_img, attributes, institution_id} = createPetDto;
+  //   const newPet: Pet = new Pet(name, specie, sex, age, url_img, description);
+  //   const institutionId = await this.checkInsitution(institution_id);
+  //   if (institutionId === null) {
+  //     // Manejar la situación en la que la institución no existe
+  //     throw new Error('La institución no existe');
+  //   }
+  //   //newPet.attributes = await this.handleAttributes(attributes);
+  //   //newPet.attributes = await this.attributesCheck(newPet, attributes);
+  //   newPet.attributes =  await Promise.resolve(attributes);
+  //   newPet.fk_institution_id = institutionId;
+  //   const desdeAtributo: Attribute = await this.attributRepository.findOne({ where: {name: attributes[0].name}});
+  //   desdeAtributo.pets = [newPet];
+  //   console.log(await this.attributRepository.save(desdeAtributo));
+  //   console.log(await this.petRepository.save(newPet));
+  //   return newPet;
+  // }
 
   private async checkInsitution(institution_id: number):Promise<number> {
     const criterion: FindOneOptions = { where: { institution_id: institution_id } };
@@ -74,50 +105,50 @@ export class PetService {
     
 
 
-  private async existAttribute(myAttribute: Attribute): Promise<boolean> {
-    try {
-      let attributeName: string = myAttribute.toString();
-      attributeName.toLowerCase()
-      myAttribute = await this.attributRepository.findOne({ where: { name: attributeName.toLowerCase() } });
-      if (myAttribute === null) {
-        return false;
-      } else {
-        return true;
-      }
-    } catch (error) {
-      console.error('Error in existAttribute:', error); // Imprime el error en la consola para depuración
-      throw new Error('No se pudo buscar el atributo');
-    }
-  }
+  // private async existAttribute(myAttribute: Attribute): Promise<boolean> {
+  //   try {
+  //     let attributeName: string = myAttribute.toString();
+  //     attributeName.toLowerCase()
+  //     myAttribute = await this.attributRepository.findOne({ where: { name: attributeName.toLowerCase() } });
+  //     if (myAttribute === null) {
+  //       return false;
+  //     } else {
+  //       return true;
+  //     }
+  //   } catch (error) {
+  //     console.error('Error in existAttribute:', error); // Imprime el error en la consola para depuración
+  //     throw new Error('No se pudo buscar el atributo');
+  //   }
+  // }
   
 
-  private async attributesCheck(myPet: Pet, myAttributes: Attribute[]):Promise<Attribute[]> {
-    if (myAttributes.length === 0) {
-      throw new Error(`Enter an attribute for the pet.`);
-    }
-    try {
-      myPet.attributes = [];
-      for (let index = 0; index < myAttributes.length; index++) {
-        //existe? SI NO
-          //SI
-            //asignar
-          //NO
-            //crear, asignar
-        if(await this.existAttribute(myAttributes[index]) === true) {
-          myPet.attributes.push(myAttributes[index])
-        } else {
-          console.log(myAttributes[index] + "no existe");
-          const newAttribute: string = myAttributes[index].toString().toLowerCase();
-          await this.attributRepository.save(new Attribute(newAttribute))
-          myPet.attributes.push(myAttributes[index])
-        }        
-      }
-      return myPet.attributes;
-    }
-    catch(error) {
-      throw new Error('no se pudo asignar '+ error)
-    }
-  } 
+  // private async attributesCheck(myPet: Pet, myAttributes: Attribute[]):Promise<Attribute[]> {
+  //   if (myAttributes.length === 0) {
+  //     throw new Error(`Enter an attribute for the pet.`);
+  //   }
+  //   try {
+  //     myPet.attributes = [];
+  //     for (let index = 0; index < myAttributes.length; index++) {
+  //       //existe? SI NO
+  //         //SI
+  //           //asignar
+  //         //NO
+  //           //crear, asignar
+  //       if(await this.existAttribute(myAttributes[index]) === true) {
+  //         myPet.attributes.push(myAttributes[index])
+  //       } else {
+  //         console.log(myAttributes[index] + "no existe");
+  //         const newAttribute: string = myAttributes[index].toString().toLowerCase();
+  //         await this.attributRepository.save(new Attribute(newAttribute))
+  //         myPet.attributes.push(myAttributes[index])
+  //       }        
+  //     }
+  //     return myPet.attributes;
+  //   }
+  //   catch(error) {
+  //     throw new Error('no se pudo asignar '+ error)
+  //   }
+  // } 
 
   
   
