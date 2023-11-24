@@ -26,7 +26,7 @@ import { database, password, username, port, host } from 'env.vars';
     "database": database,
     "entities": [__dirname + "/**/**/**.entity{.ts,.js}"],
     "synchronize": true,
-    //"logging": true
+    "logging": true
   }),
     PetModule,
     AttributeModule,
