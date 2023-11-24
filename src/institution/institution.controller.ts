@@ -3,6 +3,7 @@ import { InstitutionService } from './institution.service';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { Institution } from './entities/institution.entity';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
+import { Pet } from 'src/pet/entities/pet.entity';
 
 @Controller('institution')
 export class InstitutionController {
@@ -21,6 +22,11 @@ export class InstitutionController {
   @Get(':id')
   async findOne(@Param('id') id: string):Promise<Institution> {
     return this.institutionService.findOne(+id);
+  }
+
+  @Get('buscarMascotas/:id')
+  async buscar(@Param('id') id: number):Promise<Pet[]> {
+    return this.institutionService.buscar(id);
   }
 
   @Patch('update/:id')

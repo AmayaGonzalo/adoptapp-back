@@ -4,11 +4,14 @@ import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Institution } from './entities/institution.entity';
 import { Repository } from 'typeorm';
+import { Pet } from 'src/pet/entities/pet.entity';
 
 @Injectable()
 export class InstitutionService {
 
-  constructor(@InjectRepository(Institution)
+  constructor(@InjectRepository(Pet)
+              private readonly petRepository:Repository<Pet>,
+              @InjectRepository(Institution)
               private readonly institutionRepository:Repository<Institution>
               ){}
 
@@ -43,6 +46,24 @@ export class InstitutionService {
         throw new Error('No se ha encontrado esta institucion');
       }else{
         return type;
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en institucion - ' + error
+      },HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async buscar(id: number):Promise<Pet[]> {
+    try{
+      const type: Institution = await this.institutionRepository.findOne({ where:{id:id} });
+      if(!type){
+        throw new Error('No se ha encontrado esta institucion');
+      }else{
+        const mascotas: Pet[] = await this.petRepository.find({where: {fk_institution_id: type.id}})
+        return mascotas;
       }
     }
     catch(error){
