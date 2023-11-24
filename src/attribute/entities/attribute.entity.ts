@@ -12,7 +12,6 @@ export class Attribute {
     name: string;
 
     @ManyToMany(()=> Pet, pets=>pets.attributes)
-    @JoinTable({ name: 'pets_attributes' })
     pets: Pet[];
 
     constructor(name:string){
