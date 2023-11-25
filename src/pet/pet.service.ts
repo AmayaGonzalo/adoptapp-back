@@ -7,6 +7,7 @@ import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { City } from 'src/city/entities/city.entity';
 import { Attribute } from 'src/attribute/entities/attribute.entity';
 import { Institution } from 'src/institution/entities/institution.entity';
+import { PetDTO } from './dto/pet.dto';
 
 @Injectable()
 
@@ -94,7 +95,7 @@ export class PetService {
   // }
 
   private async checkInsitution(institution_id: number):Promise<number> {
-    const criterion: FindOneOptions = { where: { institution_id: institution_id } };
+    const criterion: FindOneOptions = { where: { id: institution_id } };
     const institution = await this.institutionRepository.findOne(criterion);
     if (!institution) {
       return null;
@@ -154,57 +155,123 @@ export class PetService {
   
   
 
-  async filterPets(pageNumber: number, specie?: string, location_id?: number, sex?: string): Promise<CreatePetDto[]> {
+  // async filterPets(pageNumber: number, specie?: string, location_id?: number, sex?: string): Promise<CreatePetDto[]> {
 
-      try {
-        const elementsPage = 10;
-        const skipItems = (pageNumber - 1) * elementsPage;
+  //     try {
+  //       const elementsPage = 10;
+  //       const skipItems = (pageNumber - 1) * elementsPage;
 
-        const filter = {
-          ...(specie ? { specie } : {}),
-          //...(location_id ? { fk_city_id: Number(location_id) } : {}),
-          //...(location_id ? { institution : { fk_city_id : location_id }} : {}),
-          ...(sex ? { sex } : {})
-        }
-        const criterion: FindManyOptions = {
-          relations: ['attributes', 'institution'],
-          take: elementsPage,
-          where: {
-            available: false,
-            ...filter,
-          },
-          skip: skipItems
-        };
+  //       const filter = {
+  //         ...(specie ? { specie } : {}),
+  //         //...(location_id ? { fk_city_id: Number(location_id) } : {}),
+  //         //...(location_id ? { institution : { fk_city_id : location_id }} : {}),
+  //         ...(sex ? { sex } : {})
+  //       }
+  //       const criterion: FindManyOptions = {
+  //         relations: ['attributes', 'institution'],
+  //         take: elementsPage,
+  //         where: {
+  //           available: false,
+  //           ...filter,
+  //         },
+  //         skip: skipItems
+  //       };
 
 
         
 
-        const leakedPets = await this.petRepository.find(criterion);
+  //       const leakedPets = await this.petRepository.find(criterion);
 
-        if (!leakedPets) {
-          throw new Error('Pet capture error.');
-        }
-        const petData: any = leakedPets.map(pet => ({
-          id: pet.id,
-          name: pet.name,
-          sex: pet.sex,
-          age: pet.age,
-          specie: pet.specie,
-          //attributes : [ { attributes : "a"}],
-          attributes : pet.attributes.map(attribute => (attribute.name)),  
-          description: pet.description,
-          url_img: pet.url_img,
-          interested: pet.interested,
-          institution : pet.institution.name
-        }));
-        return petData;
-      } catch (error) {
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: `Pet capture error -` + error.message,
-        },
-          HttpStatus.BAD_REQUEST);
+  //       if (!leakedPets) {
+  //         throw new Error('Pet capture error.');
+  //       }
+  //       const petData: any = leakedPets.map(pet => ({
+  //         id: pet.id,
+  //         name: pet.name,
+  //         sex: pet.sex,
+  //         age: pet.age,
+  //         specie: pet.specie,
+  //         //attributes : [ { attributes : "a"}],
+  //         attributes : pet.attributes.map(attribute => (attribute.name)),  
+  //         description: pet.description,
+  //         url_img: pet.url_img,
+  //         interested: pet.interested,
+  //         //institution : pet.institution.name
+  //       }));
+  //       return petData;
+  //     } catch (error) {
+  //       throw new HttpException({
+  //         status: HttpStatus.BAD_REQUEST,
+  //         error: `Pet capture error -` + error.message,
+  //       },
+  //         HttpStatus.BAD_REQUEST);
+  //     }
+  // }
+
+  // Function to filter pets based on criteria
+  async filterPets(pageNumber: number, specie?: string, location_id?: number, sex?: string): Promise<any[]> {
+
+    try {
+      const elementsPage = 10;
+      const skipItems = (pageNumber - 1) * elementsPage;
+
+      const filter = {
+        ...(specie ? { specie } : {}),
+        ...(sex ? { sex } : {}),
+        //...(location_id ? { institution : { cityId : location_id }} : {})
       }
+
+      
+      
+      const criterion: FindManyOptions = {
+        relations: ['attributes','institution'],
+        take: elementsPage,
+        where: {
+          available: false,
+          ...filter,
+        },
+        skip: skipItems
+      };
+      const leakedPets = await this.petRepository.find(criterion);
+      if (!leakedPets) {
+        throw new Error('Pet capture error.');
+      }
+
+
+      const petData: any = leakedPets.map(pet => ({
+        id: pet.id,
+        name: pet.name,
+        sex: pet.sex,
+        age: pet.age,
+        attributes: pet.attributes.map(e => e.name),
+        description: pet.description,
+        urlImg: pet.url_img,
+        interested: pet.interested,
+        institution : pet.institution,
+      }));
+      
+      return petData;
+
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: `Pet capture error -` + error.message,
+      },
+        HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  private extractString(pAttributes: Attribute[]): string[] {
+    let salida: string[];
+    console.log('entran' + pAttributes.length)
+    let aux = pAttributes.map(e => e.name);
+    console.log(aux)
+    for (let index = 0; index < 3; index++) {
+      //let atributo:string = aux[index];
+      salida[index] = aux[index]
+    }
+    console.log(salida)
+    return salida;
   }
 
   async countPets(): Promise<number> {
