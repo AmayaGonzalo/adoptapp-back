@@ -1,7 +1,10 @@
 import { Complaint } from "src/complaint/entities/complaint.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity({ name: 'complainant'})
+@Index("IDX_UNIQUE_COMPLAINANT", ["email", "phoneNumber"], { unique: true })
+
+
 export class Complainant {
 
     @PrimaryGeneratedColumn()
