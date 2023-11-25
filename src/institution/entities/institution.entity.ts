@@ -42,4 +42,12 @@ export class Institution {
     public setAddress(address:string):void{
         this.address = address;
     }
+
+    public getCity(): City {
+        return this.city;
+    }
+
+    public setCity(pCity: City):void{
+        this.city = pCity;
+    }
 }

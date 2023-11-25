@@ -10,7 +10,7 @@ export class InstitutionController {
   constructor(private readonly institutionService: InstitutionService) {}
 
   @Post('create')
-  async createNew(@Body() institutionDto: Institution):Promise<CreateInstitutionDto> {
+  async createNew(@Body() institutionDto: CreateInstitutionDto):Promise<Institution> {
     return await this.institutionService.create(institutionDto);
   }
 

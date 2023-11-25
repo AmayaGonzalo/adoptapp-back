@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Institution } from './entities/institution.entity';
 import { Repository } from 'typeorm';
 import { Pet } from 'src/pet/entities/pet.entity';
+import { City } from 'src/city/entities/city.entity';
 
 @Injectable()
 export class InstitutionService {
@@ -12,16 +13,21 @@ export class InstitutionService {
   constructor(@InjectRepository(Pet)
               private readonly petRepository:Repository<Pet>,
               @InjectRepository(Institution)
-              private readonly institutionRepository:Repository<Institution>
+              private readonly institutionRepository:Repository<Institution>,
+              @InjectRepository(City)
+              private readonly cityRepository:Repository<City>
               ){}
 
-  async create(institutionDto: Institution):Promise<CreateInstitutionDto> {
+  async create(institutionDto: CreateInstitutionDto):Promise<Institution> {
     try {
       const { name, address } = institutionDto;
-      const newInstitution : CreateInstitutionDto = await this.institutionRepository.save(new Institution(name,address));
-      if(!newInstitution){
-        throw new Error('No se pudo crear la nueva institución')
+      const cityID: City = await this.checkCity(institutionDto.cityID);
+      if(!cityID || !name || !address){
+        throw new Error('Los parametros para crear institución no son correctos')
       }else{
+        const newInstitution : Institution = new Institution(name, address);
+        newInstitution.city = cityID;
+        await this.institutionRepository.save(newInstitution);
         return newInstitution;
       }
     } 
@@ -33,6 +39,15 @@ export class InstitutionService {
       },HttpStatus.NOT_FOUND);
     }  
   }
+
+  private async checkCity(cityId):Promise<City> {
+    const encontrarCiudad: City = await this.cityRepository.findOne({where: {id:cityId}});
+    if(!encontrarCiudad) {
+      throw new Error('No se encontro la ciudad')
+    } else {
+      return encontrarCiudad;
+    }
+  } 
 
   async findAll():Promise<Institution[]> {
     const institutionTotal = await this.institutionRepository.find();
@@ -87,6 +102,14 @@ export class InstitutionService {
         if(updateInstitutionDto.address != null || updateInstitutionDto.address != undefined){
           institution.setAddress(updateInstitutionDto.address);
           institution = await this.institutionRepository.save(institution);
+        }
+        if(updateInstitutionDto.cityID != null || updateInstitutionDto.cityID != undefined){
+          //comprobacion existencia city o referencia city;
+          const cityObject: City = await this.checkCity(updateInstitutionDto.cityID);
+          if (cityObject) {
+            institution.setCity(cityObject);
+            institution = await this.institutionRepository.save(institution);
+          }
         }
         return institution;
       }
