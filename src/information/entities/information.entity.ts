@@ -12,10 +12,16 @@ export class Information {
     informationDate: Date;
 
     @Column()
-    informationUrl: string;
+    imgUrlTitle: string;
 
     @Column()
-    imgUrl: string;
+    imgUrlBody: string;
+
+    @Column()
+    title: string;
+
+    @Column()
+    descriptionUrl: string;
 
     @ManyToOne(()=>City, city=>city.informations)
     @JoinColumn()
@@ -25,24 +31,63 @@ export class Information {
     @JoinColumn()
     information_type: InformationType;
 
-    constructor(informationUrl?:string,imgUrl?:string){
-        this.informationUrl = informationUrl;
-        this.imgUrl = imgUrl;
+    constructor(imgUrlPortada:string, title: string, description: string ,imgUrlCuerpo?:string){
+        this.imgUrlTitle = imgUrlPortada;
+        this.title = title;
+        this.descriptionUrl = description;
+        if (imgUrlCuerpo == undefined) {
+            this.imgUrlBody = imgUrlPortada;
+        } else {
+            this.imgUrlBody = imgUrlCuerpo;
+        }
+    }
+    
+    public setImgUrlTitle(imgUrl:string):void{
+        this.imgUrlTitle = imgUrl;
     }
 
-    public getInformationUrl():string{
-        return this.informationUrl;
+    public getImgUrlTitle():string{
+        return this.imgUrlTitle;
+    }
+    
+    public setImgUrlBody(imgUrl:string):void{
+        this.imgUrlBody = imgUrl;
     }
 
-    public setInformationUrl(informationUrl:string):void{
-        this.informationUrl = informationUrl;
+    public getImgUrlBody():string{
+        return this.imgUrlBody;
     }
 
-    public getImgUrl():string{
-        return this.imgUrl;
+    public setTitle(auxTitle: string): void {
+        this.title = auxTitle;
     }
 
-    public setImgUrl(imgUrl:string):void{
-        this.imgUrl = imgUrl;
+    public getTitle(): string {
+        return this.title;
     }
+
+    public setDescriptionUrl(auxDescription: string): void {
+        this.descriptionUrl = auxDescription;
+    }
+
+    public getDescriptionUrl(): string {
+        return this.descriptionUrl;
+    }
+
+    public setCity(city: City): void {
+        this.city = city;
+    }
+
+    public getCity(): City {
+        return this.city;
+    }
+
+    public setInformationType(type: InformationType): void {
+        this.information_type = type;
+    }
+
+    public getInformationType(): InformationType {
+        return this.information_type;
+    }
+
 }

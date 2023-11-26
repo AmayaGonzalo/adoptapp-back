@@ -4,19 +4,31 @@ import { UpdateInformationDto } from './dto/update-information.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Information } from './entities/information.entity';
 import { Repository } from 'typeorm';
+import { City } from 'src/city/entities/city.entity';
+import { InformationType } from 'src/information_type/entities/information_type.entity';
 
 @Injectable()
 export class InformationService {
 
   constructor(@InjectRepository(Information)
-              private readonly informationRepository: Repository<Information>){}
+              private readonly informationRepository: Repository<Information>,
+              @InjectRepository(City)
+              private readonly cityRepository:Repository<City>,
+              @InjectRepository(InformationType)
+              private readonly infoTypeRepository:Repository<InformationType>
+              ){}
 
-  async create(createInformationDto: CreateInformationDto):Promise<CreateInformationDto> {
+  async create(createInformationDto: CreateInformationDto):Promise<Information> {
     try {
-      const newInformation: CreateInformationDto = await this.informationRepository.save(new Information(createInformationDto.informationUrl, createInformationDto.imgUrl));
+      // const newInformation: Information = await this.informationRepository.save(new Information(createInformationDto.informationUrl, createInformationDto.imgUrl));
+      const {imageUrlBody, imageUrlTitle, title, descriptionUrl, cityId, informationTypeId} = createInformationDto;
+      const newInformation: Information = new Information(imageUrlTitle, title, descriptionUrl, imageUrlBody);
+      newInformation.city = await this.checkCity(cityId);
+      newInformation.information_type = await this.checkInfoType(informationTypeId)
       if(!newInformation) {
         throw new Error ('No se pudo crear el information')
       } else {
+        await this.informationRepository.save(newInformation);
         return newInformation;
       }
     }
@@ -27,6 +39,24 @@ export class InformationService {
       },HttpStatus.NOT_FOUND);
     }
   }
+
+  private async checkCity(cityId: number):Promise<City> {
+    const encontrarCiudad: City = await this.cityRepository.findOne({where: {id:cityId}});
+    if(!encontrarCiudad) {
+      throw new Error('No se encontro la ciudad')
+    } else {
+      return encontrarCiudad;
+    }
+  } 
+
+  private async checkInfoType(infoTypeId: number):Promise<InformationType> {
+    const encontrarInfoType: InformationType = await this.infoTypeRepository.findOne({where: {id:infoTypeId}});
+    if(!encontrarInfoType) {
+      throw new Error('No se encontro la ciudad')
+    } else {
+      return encontrarInfoType;
+    }
+  } 
 
   async findAll():Promise<Information[]> {
     try {
@@ -68,14 +98,40 @@ export class InformationService {
       if(!infoById) {
         throw new Error ('No se recupero la info')
       } else {
-        if(updateInformationDto.imgUrl != null || updateInformationDto.imgUrl != undefined) {
-          infoById.setImgUrl(updateInformationDto.imgUrl)
+        if(updateInformationDto.imageUrlTitle != null || updateInformationDto.imageUrlTitle != undefined) {
+          infoById.setImgUrlTitle(updateInformationDto.imageUrlTitle)
+          await this.informationRepository.save(infoById);
+        }
+        
+        if(updateInformationDto.imageUrlBody != null || updateInformationDto.imageUrlBody != undefined) {
+          infoById.setImgUrlBody(updateInformationDto.imageUrlBody)
           await this.informationRepository.save(infoById);
         }
       
-        if(updateInformationDto.informationUrl != null || updateInformationDto.informationUrl != undefined) {
-          infoById.setInformationUrl(updateInformationDto.informationUrl)
+        if(updateInformationDto.title != null || updateInformationDto.title != undefined) {
+          infoById.setTitle(updateInformationDto.title)
           await this.informationRepository.save(infoById);
+        }
+
+        if(updateInformationDto.descriptionUrl != null || updateInformationDto.descriptionUrl != undefined) {
+          infoById.setDescriptionUrl(updateInformationDto.descriptionUrl)
+          await this.informationRepository.save(infoById);
+        }
+
+        if(updateInformationDto.cityId != null || updateInformationDto.cityId != undefined) {
+          const city: City = await this.checkCity(updateInformationDto.cityId)
+          if(city) {
+            infoById.setCity(city)
+            await this.informationRepository.save(infoById);
+          }
+        }
+
+        if(updateInformationDto.informationTypeId != null || updateInformationDto.informationTypeId != undefined) {
+          const infoByType: InformationType = await this.checkInfoType(updateInformationDto.informationTypeId)
+          if(infoByType) {
+            infoById.setInformationType(infoByType)
+            await this.informationRepository.save(infoById);
+          }
         }
 
         return infoById;
@@ -96,7 +152,7 @@ export class InformationService {
         throw new Error ('No se encontro la info')
       } else {
         await this.informationRepository.remove(infoById);
-        return 'Eliminado exitosamente registro info ' + infoById.imgUrl;
+        return 'Eliminado exitosamente registro info ' + infoById.title;
       }
     }
     catch(error){
