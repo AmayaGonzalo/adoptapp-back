@@ -3,7 +3,7 @@ import { CreateInformationDto } from './dto/create-information.dto';
 import { UpdateInformationDto } from './dto/update-information.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Information } from './entities/information.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { City } from 'src/city/entities/city.entity';
 import { InformationType } from 'src/information_type/entities/information_type.entity';
 
@@ -58,9 +58,16 @@ export class InformationService {
     }
   } 
 
-  async findAll():Promise<Information[]> {
+  //solo pagina las consultas, pero podria añadirse filtros por ciudad y por tipo de info.
+  async findAll(pageNumber: number):Promise<Information[]> {
     try {
-      const allInfo: Information[] = await this.informationRepository.find();
+      const elementsPage: number = 8;
+      const skipItems: number = (pageNumber - 1) * elementsPage;
+      const criterion: FindManyOptions = {
+        take: elementsPage,
+        skip: skipItems
+      }
+      const allInfo: Information[] = await this.informationRepository.find(criterion);
       if(!allInfo) {
         throw new Error ('No se recupero el array Info')
       } else {

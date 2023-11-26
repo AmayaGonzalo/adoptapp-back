@@ -12,9 +12,9 @@ export class InformationController {
     return this.informationService.create(createInformationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.informationService.findAll();
+  @Get('page/:pageNumber')
+  findAll(@Param('pageNumber') pageNumber: number) {
+    return this.informationService.findAll(pageNumber);
   }
 
   @Get(':id')
