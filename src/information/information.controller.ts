@@ -12,6 +12,13 @@ export class InformationController {
     return this.informationService.create(createInformationDto);
   }
 
+  //al igual q en pets, agregar un countInfo para saber/poder paginar las cards dentro de la pag.
+  @Get('count')
+  getCount() {
+    return this.informationService.getCount();
+  }
+
+
   @Get('page/:pageNumber')
   findAll(@Param('pageNumber') pageNumber: number) {
     return this.informationService.findAll(pageNumber);

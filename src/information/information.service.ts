@@ -58,6 +58,19 @@ export class InformationService {
     }
   } 
 
+  async getCount():Promise<number> {
+    try {  
+      const infoTotal: number = await this.informationRepository.count();
+      return infoTotal;
+    }
+    catch (error) {
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Information - no se pudo contar' + error
+      },HttpStatus.NOT_FOUND);
+    }
+  }
+
   //solo pagina las consultas, pero podria añadirse filtros por ciudad y por tipo de info.
   async findAll(pageNumber: number):Promise<Information[]> {
     try {
