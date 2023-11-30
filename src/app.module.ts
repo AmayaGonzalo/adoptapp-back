@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PetModule } from './pet/pet.module';
@@ -14,6 +14,7 @@ import { InformationModule } from './information/information.module';
 import { InformationTypeModule } from './information_type/information_type.module';
 import { UserModule } from './user/user.module';
 import { InstitutionModule } from './institution/institution.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -25,7 +26,7 @@ import { InstitutionModule } from './institution/institution.module';
     "database": "adopt_app",
     "entities": [__dirname + "/**/**/**.entity{.ts,.js}"],
     "synchronize": true
-  }),
+  }), AuthModule,
   PetModule,
   AttributeModule,
   CityModule,
@@ -37,7 +38,8 @@ import { InstitutionModule } from './institution/institution.module';
   InformationModule,
   InformationTypeModule,
   UserModule,
-  InstitutionModule
+  InstitutionModule,
+  AuthModule
   ],  
   controllers: [AppController],
   providers: [AppService],

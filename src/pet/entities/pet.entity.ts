@@ -63,6 +63,7 @@ export class Pet {
         this.available = 0;
         this.interested = 0;
         this.description = description;
+        // this.attributes = attributes || [];
     }
 
     public getName():string{

@@ -49,8 +49,9 @@ export class Client {
     @OneToMany(()=>Adoption,adoptions=>adoptions.client)
     adoptions : Adoption[];
 
-    @OneToOne(()=>User)
+    @OneToOne(()=>User, user => user.client)
     user: User;
+    
 
     constructor(name:string, surname:string, age:number, email:string, areaCode:number, phoneNumber:number, address:string, livingPlace?:string){
         this.name = name;

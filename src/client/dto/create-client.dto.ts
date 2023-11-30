@@ -30,5 +30,9 @@ export class ClientDto {
     readonly address: string;
 
     @IsString()
-    readonly livingPlace: string;    
+    readonly livingPlace: string;  
+    
+    @IsNumber()
+    @IsNotEmpty()
+    readonly city: number;
 }

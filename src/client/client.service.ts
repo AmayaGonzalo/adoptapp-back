@@ -4,22 +4,36 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from './entities/client.entity';
+import { City } from 'src/city/entities/city.entity';
 
 @Injectable()
 export class ClientService {
 
   constructor(@InjectRepository(Client)
-              private readonly clientRepository:Repository<Client>){}
+              private readonly clientRepository:Repository<Client>,
+              @InjectRepository(City)
+              private readonly cityRepository:Repository<City>
+  ){}
 
-  async create(ClientDto: ClientDto):Promise<ClientDto> {
+  // async findOneByEmail(email:string){
+  //   return await this.clientRepository.findOneBy({email}); 
+  // }
+
+  async createNewClient(ClientDto: ClientDto):Promise<Client> {
     try{
-      const { name, surname, age, email, areaCode, phoneNumber, address, livingPlace } = ClientDto;
-      const newClient: ClientDto = await this.clientRepository.save(new Client(name, surname, age, email, areaCode, phoneNumber, address, livingPlace ));
-      if(!newClient){
-        throw new Error('No se pudo crear el cliente');
-      }
-      else{
-        return newClient;
+      const { name, surname, age, email, areaCode, phoneNumber, address, livingPlace, city } = ClientDto;      
+      const findCity: City = await this.cityRepository.findOne({ where:{ id:city }});
+      if(!findCity){
+        throw new Error('No se pudo encontrar la ciudad donde vives');
+      }else{
+        const newClient: Client = await this.clientRepository.save(new Client(name, surname, age, email, areaCode, phoneNumber, address, livingPlace));
+        newClient.city = findCity; 
+        await this.clientRepository.save(newClient);
+        if(!newClient){
+          throw new Error('No se pudo crear el cliente');
+        }else{
+          return newClient;
+        }
       }
     }
     catch(error){
@@ -28,11 +42,11 @@ export class ClientService {
         error: 'Error en Cliente - ' + error
       },HttpStatus.NOT_FOUND);
     }    
-  }
+  };
 
-  async findAll():Promise<ClientDto[]> {
+  async findAll():Promise<Client[]> {
     try{
-      const clients: ClientDto[] = await this.clientRepository.find();
+      const clients: Client[] = await this.clientRepository.find();
       if(!clients){
         throw new Error('Lo siento, no se encontró la lista de clientes');
       }else{
@@ -45,11 +59,11 @@ export class ClientService {
         error: 'Error en Cliente - ' + error
       },HttpStatus.NOT_FOUND);
     }    
-  }  
+  };
 
-  async findOne(id: number):Promise<ClientDto> {
+  async findOne(id: number):Promise<Client> {
     try{
-      const client: ClientDto = await this.clientRepository.findOne({ where:{id:id} });
+      const client: Client = await this.clientRepository.findOne({ where:{id:id}, relations:['city'] });
       if(!client){
         throw new Error('No se encontró el cliente');
       }else{
@@ -62,9 +76,9 @@ export class ClientService {
         error: 'Error en Cliente - ' + error
       },HttpStatus.NOT_FOUND);
     }    
-  }
+  };
 
-  async update(id: number, updateClientDto: UpdateClientDto):Promise<ClientDto> {
+  async update(id: number, updateClientDto: UpdateClientDto):Promise<Client> {
     try{
       const { name, surname, age, email, areaCode, phoneNumber, address, livingPlace } = updateClientDto;
       let client: Client = await this.clientRepository.findOne({ where:{id:id} });
@@ -112,7 +126,7 @@ export class ClientService {
         error: 'Error en Cliente - ' + error
       },HttpStatus.NOT_FOUND);
     }    
-  }
+  };
 
   async remove(id: number):Promise<string> {
     try{
@@ -130,5 +144,30 @@ export class ClientService {
         error: 'Error en Cliente - ' + error
       },HttpStatus.NOT_FOUND);
     }
-  }
+  };
+  
+  async addCity(body):Promise<any>{
+    try{
+      const  { cityId, clientId } = body;
+      let client: Client = await this.clientRepository.findOne({ where:{id:clientId} });
+      if(!client){
+        throw new Error('No se encontró el cliente');
+      }else{
+        const city: City = await this.cityRepository.findOne({ where:{id:cityId} });
+        if(!city){
+          throw new Error('La ciudad que quiere asignar no existe');
+        }else{
+          client.city = city;
+          await this.clientRepository.save(client);
+          return client;
+        }
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Cliente - ' + error
+      },HttpStatus.NOT_FOUND);
+    }
+  };
 }

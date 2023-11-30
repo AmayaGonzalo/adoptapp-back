@@ -24,4 +24,10 @@ export class PetDto {
     @IsString()
     @IsNotEmpty()
     readonly url_img: string;
+
+    // @IsString()
+    // readonly attributes: [];
+
+    @IsNumber()
+    readonly interested: number;
 }
