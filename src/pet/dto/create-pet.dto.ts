@@ -1,6 +1,10 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { PrimaryColumn } from "typeorm";
 
 export class PetDto {
+    @PrimaryColumn()
+    readonly id: number;
+
     @IsString()
     @IsNotEmpty()
     readonly name: string;
